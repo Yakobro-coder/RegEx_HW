@@ -21,38 +21,28 @@ def write_fio_in_column(contacts_list):
         except IndexError:
             pass
         # print(block)
-    return merge_clone(contacts_list)
+    return contacts_list
 
 
 def merge_clone(contacts_list):
-    print(cont_list)
-    print(len(cont_list))
-    # i = 2
-    # for block1 in contacts_list[1:]:
-    #     count = i
-    #     for block2 in contacts_list[i:]:
-    #         if block1[0:2] == block2[0:2]:
-    #             for numb in range(0, len(block1)):
-    #                 if block1[numb] == '':
-    #                     block1[numb] = block2[numb]
-    #             del contacts_list[count]
-    #             i -= 1
-    #         count += 1
-    #
-    #     i += 1
-    #
-    i2 = 2
-    for block in contacts_list[1:]:
-        for index in range(i2, len(contacts_list[1:])):
-            print(f'{block[0:2]} =-------= {contacts_list[i2][0:2]}')
-            if block[0:2] == contacts_list[i2][0:2]:
-                for numb in range(0, len(block)+1):
-                    if block[numb] == '':
-                        block[numb] = contacts_list[i2][numb]
-                del contacts_list[i2]
-            i2 += 1
-        index = 0
+    del_list = []
+    for num1, block1 in enumerate(contacts_list[1:], 1):
+        for num2, block2 in enumerate(contacts_list[1:], 1):
+            if block1[0:2] == block2[0:2] and num1 != num2 and block1[0] != 0:
+                for numb in range(0, len(block1)):
+                    if block1[numb] == '':
+                        block1[numb] = block2[numb]
+                    block2[numb] = 0
+                del_list.append(num2)
 
-write_fio_in_column(cont_list)
-print(cont_list)
-print(len(cont_list))
+    for i in list(reversed(sorted(del_list))):
+        del contacts_list[i]
+
+    return contacts_list
+
+
+def regex_phone(contacts_list):
+    pass
+
+
+print(merge_clone(write_fio_in_column(cont_list)))
