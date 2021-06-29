@@ -58,7 +58,7 @@ if __name__ == '__main__':
         rows = csv.reader(f, delimiter=',')
         cont_list = list(rows)
 
-    with open("fixed_phonebook.csv", "w") as f:
+    with open("fixed_phonebook.csv", "w", encoding='utf-8') as f:
         data_writer = csv.writer(f, delimiter=',')
         # Вместо contacts_list подставьте свой список
         data_writer.writerows(regex_phone(merge_clone(write_fio_in_column(cont_list))))
