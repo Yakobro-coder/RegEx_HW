@@ -1,9 +1,6 @@
+import re
 from pprint import pprint
 import csv
-
-with open('phonebook_raw.csv', encoding='utf-8') as f:
-    rows = csv.reader(f, delimiter=',')
-    cont_list = list(rows)
 
 
 def write_fio_in_column(contacts_list):
@@ -42,7 +39,26 @@ def merge_clone(contacts_list):
 
 
 def regex_phone(contacts_list):
-    pass
+    pattern = re.compile(
+        '\+?(\d{1,1})\s?\(?(\d{3,3})\)?\s?-?(\d{3,3})\-?(\d{2,2})\-?(\d{2,2})\ *\(*([ \(доб.]*\d{4,4})*[)]*')
+    for block in contacts_list:
+        if len(block[5]) < 20:
+            block[5] = pattern.sub(r'+7(\2)\3-\4-\5', block[5])
+        elif len(block[5]) > 20:
+            block[5] = pattern.sub(r'+7(\2)\3-\4-\5 \6', block[5])
+
+    return contacts_list
 
 
-print(merge_clone(write_fio_in_column(cont_list)))
+# print(regex_phone(merge_clone(write_fio_in_column(cont_list))))
+
+
+if __name__ == '__main__':
+    with open('phonebook_raw.csv', encoding='utf-8') as f:
+        rows = csv.reader(f, delimiter=',')
+        cont_list = list(rows)
+
+    with open("fixed_phonebook.csv", "w") as f:
+        data_writer = csv.writer(f, delimiter=',')
+        # Вместо contacts_list подставьте свой список
+        data_writer.writerows(regex_phone(merge_clone(write_fio_in_column(cont_list))))
